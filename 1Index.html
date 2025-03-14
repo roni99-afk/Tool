@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compression Tool</title>
+    <meta name="description" content="Free Image Compression Tool for fast and efficient image optimization with adjustable compression levels.">
+    <meta name="keywords" content="image compression, optimize images, SEO optimization, reduce image size">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            color: #fff;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            background: #1d1d1d;
+            color: #fff;
+            cursor: pointer;
+            outline: none;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-top: 10px;
+            accent-color: #4CAF50;
+        }
+
+        #compressionValue {
+            display: block;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        canvas {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            margin-top: 15px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        #downloadLink {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+
+        #downloadLink:hover {
+            background-color: #45a049;
+        }
+
+        .ad-container {
+            margin-top: 20px;
+            background: #1d1d1d;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Compression Tool</h1>
+
+        <!-- Image Upload -->
+        <input type="file" id="imageInput" accept="image/*">
+        <label for="compressionLevel">Compression Level:</label>
+        <input type="range" id="compressionLevel" min="10" max="100" value="70">
+        <span id="compressionValue">70%</span>
+
+        <!-- Display Area -->
+        <canvas id="canvas"></canvas>
+        <a id="downloadLink" download="compressed_image.jpg">Download Compressed Image</a>
+
+        <!-- AdSense Section -->
+        <div class="ad-container">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="YOUR-ADSENSE-AD-UNIT-ID"
+                 data-ad-slot="YOUR-AD-SLOT-ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="footer">
+            © 2025 Image Compression Tool | Optimized for SEO & Performance
+        </div>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const compressionLevel = document.getElementById('compressionLevel');
+        const compressionValue = document.getElementById('compressionValue');
+        const canvas = document.getElementById('canvas');
+        const downloadLink = document.getElementById('downloadLink');
+
+        const ctx = canvas.getContext('2d');
+
+        imageInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function () {
+                    const maxWidth = 800;
+                    const scale = maxWidth / img.width;
+                    const newWidth = maxWidth;
+                    const newHeight = img.height * scale;
+
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+
+                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                    compressImage();
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+
+        compressionLevel.addEventListener('input', function () {
+            compressionValue.textContent = `${compressionLevel.value}%`;
+            compressImage();
+        });
+
+        function compressImage() {
+            const quality = compressionLevel.value / 100;
+            canvas.toBlob(function (blob) {
+                const url = URL.createObjectURL(blob);
+                downloadLink.href = url;
+            }, 'image/jpeg', quality);
+        }
+    </script>
+</body>
+</html>
